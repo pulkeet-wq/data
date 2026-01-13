@@ -24,6 +24,7 @@ from absl import flags
 from absl import app
 from absl import logging
 from retry import retry
+import numpy as np
 # FIX: Monkey-patch for Python 3.10+ where collections.Mapping was moved to collections.abc
 
 import collections
@@ -129,6 +130,7 @@ def process(_INPUT_FILE_PATH, _OUTOUT_FILE_PATH, date_from_start_processing):
             # Format "date" column as "YYYY-MM"
             in_df["date"] = in_df["year"] + "-" + in_df["period"].str[-2:]
             in_df = in_df[["date", "value"]]
+            in_df["value"] = in_df["value"].replace("-", np.nan)
             in_df.columns = ["date", "cpi"]
             # Convert 'date' column to datetime format
             logging.info(
